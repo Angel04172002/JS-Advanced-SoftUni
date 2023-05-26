@@ -1,30 +1,23 @@
 function magicMatrices(matrix) {
 
-    if(matrix.length == 0)
-    {
-        return;
-    }
-
-    let sumOfFirstRow = matrix[0].reduce((acc, curr) => acc + curr);
-    let isMagical = true;
-
+    let sumOfFirstRow = matrix[0].reduce((acc, curr) => acc + curr, 0);
 
     for (let i = 0; i < matrix.length; i++) {
 
         let sumOfCurrentRow = 0;
         let sumOfCurrentCol = 0;
 
-        for (let j = 0; j < matrix[i].length; j++) {
+        for (let j = 0; j < matrix.length; j++) {
 
             sumOfCurrentRow += matrix[i][j];
             sumOfCurrentCol += matrix[j][i];
         }
 
         if (sumOfFirstRow !== sumOfCurrentRow || sumOfFirstRow !== sumOfCurrentCol) {
-            isMagical = false;
-            break;
+            
+            return false;
         }
     }
 
-    console.log(isMagical);
+    return true;
 }
