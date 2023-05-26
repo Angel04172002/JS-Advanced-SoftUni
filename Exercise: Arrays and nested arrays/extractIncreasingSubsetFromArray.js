@@ -4,7 +4,7 @@ function extractIncreasingSubsetFromArray(arr) {
 
     let result = arr.reduce((acc, curr) => {
 
-        if (curr > maxElement) {
+        if (curr >= maxElement) {
             maxElement = curr;
             let temp = acc;
             temp.push(curr);
@@ -16,4 +16,5 @@ function extractIncreasingSubsetFromArray(arr) {
 
     return result;
 }
+
 
