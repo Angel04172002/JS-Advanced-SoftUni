@@ -1,38 +1,56 @@
 function solve() {
 
-    let obj = {
-        mage(name) {
+    let mageHero = {
+
+        mageProto: {
+            cast: function (spellname) {
+                this.mana--;
+                console.log(`${this.name} cast ${spellname}`)
+            },
+        },
+
+        mage: function (name) {
 
             let mageObj = {
-
+                ...this.mageProto,
                 name,
-                health: 100,
                 mana: 100,
-                cast(spell) {
-                    this.mana--;
-                    console.log(`${this.name} cast ${spell}`);
-                }
+                health: 100
             };
 
             return mageObj;
         },
-        fighter(name) {
+    };
+
+
+    let fighterHero = {
+
+        fightProto: {
+
+            fight: function() {
+
+                this.stamina--;
+                console.log(`${this.name} slashes at the foe!`)
+            },
+        },
+
+        fighter: function(name) {
 
             let fighterObj = {
-
+                ...this.fightProto,
                 name,
-                health: 100,
                 stamina: 100,
-                fight() {
-
-                    this.stamina--;
-                    console.log(`${this.name} slashes at the foe!`);
-                },
+                health: 100
             };
 
             return fighterObj;
         },
     };
 
-    return obj;
+    let heroes = {
+        ...mageHero,
+        ...fighterHero
+    };
+
+    return heroes;
 }
