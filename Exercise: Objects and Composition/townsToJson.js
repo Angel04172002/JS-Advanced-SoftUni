@@ -1,26 +1,35 @@
 function townsToJson(input) {
 
+    let matrix = input.map(e => {
 
-    let towns = [];
-    let townData = {};
+        let arr = e.trim().split('|').filter(x => x.length > 0).map(x => x.trim());
+        return arr;
+    });
 
-    let [town, latitude, longitude] = input[0].split("|").filter(x => x.length > 0).map(x => x.trim());
+    let headers = matrix[0];
+    let data = matrix.slice(1);
 
-    for(let i = 1; i < input.length; i++) {
 
-        let [currentTown, currentLatitude, currentLongitude] = input[i].split("|").filter(x => x.length > 0).map(x => x.trim());
+    let result = data.map((arr) => {
 
-        currentLatitude = Number(currentLatitude);
-        currentLongitude = Number(currentLongitude);
+        let tempDict = {};
 
-        townData[town] = currentTown;
-        townData[latitude] = Number(currentLatitude.toFixed(2));
-        townData[longitude] = Number(currentLongitude.toFixed(2));
+        headers.forEach((header, i) => {
 
-        towns.push(townData);
+            let value = Number(arr[i]);
 
-        townData = {};
-    };
+            if (Number.isNaN(value)) {
+                value = arr[i];
+            } else {
+                value = Number(value.toFixed(2));
+            }
 
-    console.log(JSON.stringify(towns));
+            tempDict[header] = value;
+        });
+
+        return tempDict;
+    });
+
+    
+    console.log(JSON.stringify(result));
 }
