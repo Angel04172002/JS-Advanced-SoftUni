@@ -1,45 +1,25 @@
 function lowestPricesInCities(input) {
 
     let data = {};
-    let products = [];
 
     input.forEach(x => {
 
-        let [townName, currentProduct, currentPrice] = x.split(" | ");
-        currentPrice = Number(currentPrice);
+        let [town, model, price] = x.split(" | ");
+        price = Number(price);
 
-        let entry = {};
-        entry.town = townName;
-        entry.price = currentPrice;
+        if(!data[model]) {
+            data[model] = {};
+        }
 
-        data.product = currentProduct;
-        data.info = entry;
+        data[model][town] = price;
+    });
 
-        let foundProduct = products.find(o => {
 
-            let product = o.product;
+    Object.entries(data).forEach(el => {
 
-            return product === currentProduct;
+        let sorted = Object.entries(el[1]).sort((a, b) => {
+            return a[1] - b[1];
         });
-
-
-        if (foundProduct) {
-
-            if (foundProduct.info.price > currentPrice) {
-                foundProduct.info.price = currentPrice;
-                foundProduct.info.town = townName;
-            }; 
-
-        } else {
-            products.push(data);
-        };
-
-        data = {};
-    });
-
-    
-    products.forEach(p => {
-
-        console.log(`${p.product} -> ${p.info.price} (${p.info.town})`);
-    });
+        console.log(`${el[0]} -> ${sorted[0][1]} (${sorted[0][0]})`)
+    }); 
 }
