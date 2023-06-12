@@ -1,6 +1,6 @@
 function sumTable() {
 
-    let tableDataElements = document.querySelectorAll('table tr td:nth-of-type(2)');
+    let tableDataElements = document.querySelectorAll('table tr td:nth-of-type(2n)');
     let sumElement = document.getElementById('sum');
     let totalSum = 0;
     let arrayOfDataElements = Array.from(tableDataElements);
