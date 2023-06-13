@@ -1,37 +1,30 @@
 function solve() {
 
-  let cases = {
-    "Camel Case": function (input) {
+    const CAMEL_CASE = 'Camel Case';
+    const PASCAL_CASE = 'Pascal Case';
 
-      let arr = input.split(' ').map((x, i) => {
-        if (i != 0) {
-          return x[0].toUpperCase() + x.substring(1).toLowerCase();
-        };
-        return x.toLowerCase();
-      });
+    let inputTextElement = document.getElementById('text');
+    let namingConventionElement = document.getElementById('naming-convention');
+    let resultElement = document.getElementById('result');
 
-      return arr.join('');
-    },
+    if(namingConventionElement.value != CAMEL_CASE && namingConventionElement.value != PASCAL_CASE) {
+        resultElement.textContent = 'Error!';
+        return;
+    }
 
-    "Pascal Case": function (input) {
+    let startingPoint = 0;
+    let arrOfStrings = inputTextElement.value.toLowerCase().split(' ');
+    let result = [];
 
-      let arr = input.split(' ').map(x => x[0].toUpperCase() + x.substring(1).toLowerCase());
-      return arr.join('');
-    },
-  };
+    if(namingConventionElement.value == CAMEL_CASE) {
+        result.push(arrOfStrings[0][0] + arrOfStrings[0].substring(1));
+        startingPoint = 1;
+    };
 
-  let firstInputElement = document.getElementById('text').value;
-  let secondInputElement = document.getElementById('naming-convention').value;
+    for(let i = startingPoint; i < arrOfStrings.length; i++) {
 
-  let caseFunc = cases[secondInputElement];
-  let modifiedText = 'Error!';
+        result.push(arrOfStrings[i][0].toUpperCase() + arrOfStrings[i].substring(1));
+    };
 
-
-  if(caseFunc) {
-    modifiedText = caseFunc(firstInputElement);
-  };
-
-  let resultElement = document.getElementById('result');
-
-  resultElement.textContent = modifiedText;
+    resultElement.textContent = result.join('');
 }
