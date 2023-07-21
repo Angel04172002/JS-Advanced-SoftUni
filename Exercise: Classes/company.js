@@ -1,74 +1,70 @@
 class Company {
-    departments = {};
+
+    departments = [];
 
     checkForValidInput(value) {
         return value !== '' && value !== null && value !== undefined;
     }
 
+    getDepart(name) {
+
+        let existingDepartment = this.departments.find(x => x.name === name);
+
+        if (!existingDepartment) {
+
+            let newDepartment = { name, employees: [], salaries: [], positions: [] };
+            this.departments.push(newDepartment);
+            return newDepartment;
+        };
+
+        return existingDepartment;
+    }
+
+    getSalariesSum(department) {
+        return department.salaries.reduce((acc, curr) => acc + curr, 0);
+    }
+
+    getBestDepart() {
+        return this.departments.sort((a, b) => {
+
+            return this.getSalariesSum(b) / b.salaries.length -
+                   this.getSalariesSum(a) / a.salaries.length
+
+        })[0];
+    }
+
     addEmployee(name, salary, position, department) {
+
         if (!this.checkForValidInput(name) || !this.checkForValidInput(salary) ||
             !this.checkForValidInput(position) || !this.checkForValidInput(department) || salary < 0) {
 
             throw new Error('Invalid input!');
         }
 
-        if (!this.departments[department]) {
-            this.departments[department] = [];
-        }
-
-        this.departments[department].push({
-            name,
-            salary,
-            position
-        });
+        let foundDepartment = this.getDepart(department);
+        foundDepartment.employees.push(name);
+        foundDepartment.salaries.push(salary);
+        foundDepartment.positions.push(position);
 
         return `New employee is hired. Name: ${name}. Position: ${position}`;
-
     }
 
     bestDepartment() {
+        //dep with highest average salary
+        let bestDep = this.getBestDepart();
 
-        let bestDepartment = { departmentInfo: { salary: 0 } };
+        let employeesToPrint = bestDep.employees.reduce((acc, curr, index) => {
+            acc[index] = [];
+            acc[index].push(curr, bestDep.salaries[index], bestDep.positions[index]);
+            return acc;
+        }, []).sort((a, b) => {
+            return a[1] - b[1] === 0 ? a[0].localeCompare(b[0]) : b[1] - a[1];
+        }).map(x => x.join(' ')).join('\n');
 
-        for (let key of Object.keys(this.departments)) {
+        let averageSalary = (this.getSalariesSum(bestDep) / bestDep.salaries.length).toFixed(2);
 
-            let averageSalary = this.departments[key].reduce((acc, curr, index, arr) => {
+        let output = `Best Department is: ${bestDep.name}\nAverage salary: ${averageSalary}\n${employeesToPrint}`;
 
-                acc += Number(curr.salary);
-
-                if (index === arr.length - 1) {
-                    return acc / arr.length;
-                }
-
-                return acc;
-            }, 0);
-
-            if (averageSalary > bestDepartment.departmentInfo.salary) {
-                bestDepartment = {
-                    departmentName: key,
-                    departmentInfo: this.departments[key]
-                };
-
-                bestDepartment.averageSalary = averageSalary;
-            }
-        }
-
-        let output = [];
-
-        output.push(`Best Department is: ${bestDepartment.departmentName}`);
-        output.push(`Average salary: ${bestDepartment.averageSalary.toFixed(2)}`);
-
-        bestDepartment.departmentInfo.sort((a, b) => {
-            let firstCriteria = b.salary - a.salary;
-            let secondCriteria = a.name.localeCompare(b.name);
-
-            return firstCriteria || secondCriteria;
-        });
-
-        for (let employee of bestDepartment.departmentInfo) {
-            output.push(`${employee.name} ${employee.salary} ${employee.position}`);
-        }
-
-        return output.join('\n');
+        return output;
     }
 }
