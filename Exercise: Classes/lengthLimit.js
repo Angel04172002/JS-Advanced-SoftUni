@@ -9,11 +9,9 @@ class Stringer {
     }
 
     decrease(length) {
-        this.innerLength -= length;
 
-        if(this.innerLength < 0) {
-            this.innerLength = 0;
-        }
+        let result = this.innerLength - length;
+        this.innerLength = result >= 0 ? result : 0;
     }
 
     toString() {
@@ -21,10 +19,9 @@ class Stringer {
         if(this.innerLength === 0) {
             return '...';
         }
-
         
         let stringToAdd =  this.innerString.length > this.innerLength ? '...' : '';
-
         return this.innerString.substring(0, this.innerLength) + stringToAdd;
     }
 }
+
