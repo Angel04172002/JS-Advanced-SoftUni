@@ -1,20 +1,19 @@
 function getTickets(ticketDescriptions, sortingCriteria) {
+    
+    class Ticket {
+        constructor(destination, price, status) {
+            this.destination = destination;
+            this.price = price;
+            this.status = status;
+        }
+    }
 
-    const tickets = [];
-
-    const sortingCriterias = {
-        destination: (a, b) => a.destination.localeCompare(b.destination),
-        price: (a, b) => a.price - b.price,
-        status: (a, b) => a.status.localeCompare(b.status)
-    };
-
-    ticketDescriptions.forEach(x => {
-
-        let [destination, price, status] = x.split('|');
-        price = Number(price);
-        const ticket = { destination, price, status };
-        tickets.push(ticket);
-    });
-
-    return tickets.sort(sortingCriterias[sortingCriteria]);
+    return [...ticketDescriptions]
+        .map(x => x.split('|'))
+        .map(x => new Ticket(x[0], Number(x[1]), x[2]))
+        .sort((a, b) => {
+            return typeof a[sortingCriteria] === 'number' 
+            ? a[sortingCriteria] - b[sortingCriteria] 
+            : a[sortingCriteria].localeCompare(b[sortingCriteria]);
+        });
 }
